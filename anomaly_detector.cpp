@@ -98,7 +98,7 @@ int main(int argc, char** argv){
 	
 	fmat Yf;
 	fvec ypsd;
-	// Loop over the artificial signal
+	// Loop over the signals data
 	for(int i = 0; i < NUM_FRAMES; i++){
 		adc_read_multiple(NUM_PTS, u); 
 		
@@ -188,43 +188,43 @@ int main(int argc, char** argv){
 	float yn = norm(Nr*ypsd)/norm(ypsd);
 	yn = n1/n2;
 	// Use K = 2.8 for example
-    float K = 2.8;
-    // Threshold
-    float Tr = K*yn;
+    	float K = 2.8;
+    	// Threshold
+    	float Tr = K*yn;
     
-    cout << "The threshold Tr is " << Tr << endl;
+    	cout << "The threshold Tr is " << Tr << endl;
     
     
-    // --------------------------------------
-    cout << " Now do the operating phase\n";
-    // Take a segment of the sine wave in the training phase
-    // Suppose v is the wave segment
-    //fvec t1 = linspace<fvec>(Tmin,rbound,NUM_PTS);
-    /*
-    fvec t1(NUM_PTS);
-    for(int i = 0; i<NUM_PTS; i++){
-    	t1(i) = t(i);
-    }
-    int f1 = 2;
-    fvec v = sin(2*pi*f1*t1);
-    */
+    	// --------------------------------------
+    	cout << " Now do the operating phase\n";
+    	// Take a segment of the sine wave in the training phase
+    	// Suppose v is the wave segment
+    	//fvec t1 = linspace<fvec>(Tmin,rbound,NUM_PTS);
+    	/*
+    	fvec t1(NUM_PTS);
+    	for(int i = 0; i<NUM_PTS; i++){
+    		t1(i) = t(i);
+    	}
+    	int f1 = 2;
+    	fvec v = sin(2*pi*f1*t1);
+    	*/
     
-    adc_read_multiple(NUM_PTS, u); 
-    fvec v(NUM_PTS);
+    	adc_read_multiple(NUM_PTS, u); 
+    	fvec v(NUM_PTS);
 	for(int i = 0; i < NUM_PTS; i++){
 		v(i) = u[i];
 	}
     
     
-    fvec x = v - mean(v);
-    // Compute fft
-    cx_fvec xspec = fft(x);
-    fvec xpsd = abs(xspec);
-    xpsd = square(xpsd);
-    float tmp1 = sum(xpsd);
-    xpsd = xpsd/tmp1;
-    // Normalize and threshold spectrum
-    for(int j = 0; j< size(xpsd,0); j++){
+    	fvec x = v - mean(v);
+    	// Compute fft
+    	cx_fvec xspec = fft(x);
+    	fvec xpsd = abs(xspec);
+    	xpsd = square(xpsd);
+    	float tmp1 = sum(xpsd);
+    	xpsd = xpsd/tmp1;
+    	// Normalize and threshold spectrum
+    	for(int j = 0; j< size(xpsd,0); j++){
 		if(v(j) < ZEROTHRESH){
 			v(j) = 0.0f;
 		}
